@@ -1,0 +1,87 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+html, body {
+    height: 100%;
+}
+
+main {
+    background-image: url(img/bg.jpg);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.playingField {
+    background-image: url(img/playingField.JPG);
+    width: 1000px;
+    height: 650px;
+    border: 10px solid #fff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    margin: 30px;
+}
+
+.playingField div {
+    height: 130px;
+    width: 100px;
+    margin: 10px;
+    margin-top: 50px;
+
+}
+
+.non {
+    visibility: hidden;
+}
+
+.start {
+    background: beige;
+    height: 50px;
+    width: 150px;
+    margin: 0 auto;
+    margin-top: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius: 10px;
+
+}
+
+.checkbox {
+    background: beige;
+    height: 50px;
+    width: 150px;
+    margin: 0 auto;
+    margin-top: 50px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.cardsPlace {
+    border: 7px solid #3CB371;
+    border-radius: 10px;
+
+}
+
+aside {
+    height: 650px;
+    width: 200px;
+    border: 10px solid #fff;
+    border-radius: 10px;
+    background-image: url(img/playingField.JPG);
+    margin: 30px;
+
+}
+
+.cont {
+    width: 1380px;
+    display: flex;
+    justify-content: flex-start;
+}
