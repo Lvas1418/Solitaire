@@ -1,13 +1,14 @@
 /*   I know that this code has a smell, but I also know that I can do better. 
 
     Ok. Lets look what could be better
+    
     Again - you used classes to make your code structured and this is good
     but classes here has no meaning at all
     because they are just containers
     and you could use flat objects instead
 
-    A lot of code spent to hande styles
-    Better knowledge of markup can save you time and efforts in js
+    A lot of code spent to hande styles and UI
+    Better knowledge of markup can save your time and efforts in js
 */
 
 (function () {
@@ -36,7 +37,7 @@
 
         global variable at the moment
 
-        all code shares this structure.
+        all the code shares this structure.
         You should think more in component way and split responsibilities
     */
     init = {
@@ -70,8 +71,8 @@
                 Recall about referencing types
 
                 when you work with this.init your 'init' object will be changed as well
-                you can copy it using Object.assign but there is nestes structures
-                so you need deep cloning which is not a part of standart tools
+                you can copy it using Object.assign but there is nested structures
+                so you need deep cloning which is not a part of standart js tools
                 and can be achieved by using custom-built copying functions
             */
             this.init = init;
@@ -259,6 +260,28 @@
             Overcomplicated
 
             same as method below
+
+            Surprisingly but the code below works :)
+
+            I don't wont to parse and comment further
+            because of bad readability and a lot of spaghetti
+            I will just summarize here
+
+            - Game logic is entangled with UI work.
+
+            - Too much nesting for
+                                if
+                                    if
+                                        for
+                                            if
+                                                etc...
+
+            - deep method/properties accessing obj.prop1.prop2.prop3 
+                getting worse when some prop is array. Don't be lazy and put them into variables with good names.
+                This approach works only while you are developing and keep these structures in mind
+
+            - I guess here is a lot of code that is repeatable and could be moved to a separate method(s)
+                All these loops looks like the same
         */
         dropCards(event) {
             let el, data, lastEl, insertEl, lasttElementId, lasttElementColor, lasttElementrank, insertElColor,
