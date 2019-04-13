@@ -1,7 +1,25 @@
-/*   I know that this code has a smell, but I also know that I can do better.  */
+/*   I know that this code has a smell, but I also know that I can do better. 
+
+    Ok. Lets look what could be better
+    
+    Again - you used classes to make your code structured and this is good
+    but classes here has no meaning at all
+    because they are just containers
+    and you could use flat objects instead
+
+    A lot of code spent to hande styles and UI
+    Better knowledge of markup can save your time and efforts in js
+*/
 
 (function () {
 
+    /*
+        Don't use one letter namings
+        even if you use these params just to reassing to named props
+
+        Class without behaviour it is only data container
+        You could delegate some work to this
+    */
     class Card {
         constructor(r, t, c, f, id) {
             this.visible = false,
@@ -14,10 +32,23 @@
         }
     }
 
+    /*
+        var,let,const
+
+        global variable at the moment
+
+        all the code shares this structure.
+        You should think more in component way and split responsibilities
+    */
     init = {
         deck: [],
         deck2: [],
         arrhandOutCards: [],
+        /*
+            No reason to define empty matrix here, could be just []
+            I can imagine that you use count of matrix rows as parameter
+            for loop, but below you just use magic number '7' :)
+        */
         arrOfCardsPlaces: [[], [], [], [], [], [], []],
         finishinDecks: [[], [], [], []],
         draggableСards: [],
@@ -36,6 +67,14 @@
 
     class Game {
         constructor() {
+            /*
+                Recall about referencing types
+
+                when you work with this.init your 'init' object will be changed as well
+                you can copy it using Object.assign but there is nested structures
+                so you need deep cloning which is not a part of standart js tools
+                and can be achieved by using custom-built copying functions
+            */
             this.init = init;
             this.init.startButton.addEventListener('click', this.startGame.bind(this));
             this.init.start.addEventListener('click', this.handOutCards.bind(this));
@@ -73,13 +112,31 @@
 
             //Проверяем, по сколько карт раздавать
             (document.getElementById('checkbox').checked) ? this.init.numhandOutCards = 3 : this.init.numhandOutCards = 1;
+
+            /*
+                let el ... ;
+                let el2 ... ;
+                let margTop ... ;
+
+                more readable
+
+                el2 and margTop could be loop scope variables below
+            */
             let el = document.createElement("img"), el2, margTop = 0;
 
+            /*
+                Why don't you make this function an instance method
+                you use it 4 times and always with 'Game' context
+            */
             function creatObj(color, type) {
 
                 //Создаем экземпляры карт и помещаем их в массив (колоду)
                 for (let i = 0; i <= 12; i++) {
                     this.init.deck.push(new Card(i, type, color, i + type + ".gif", i + type));
+
+                    /*
+                        Couldn't find out what deck2 is used for and why you double Card instances
+                    */
                     this.init.deck2.push(new Card(i, type, color, i + type + ".gif", i + type));
                 }
             }
@@ -107,6 +164,12 @@
 
             //Размещаем карты на поле
             for (let j = 1; j <= 7; j++) {
+                /*
+                    No need to use concat here. Your array is empty
+                    What the benefit of merging empty array with non-empty?
+
+                    getting rid of concat will make this line less spaghetti
+                */
                 this.init.arrOfCardsPlaces[j - 1] = this.init.arrOfCardsPlaces[j - 1].concat(this.init.deck.splice(this.init.deck.length - j, j));
                 for (let i = 1; i <= this.init.arrOfCardsPlaces[j - 1].length; i++) {
                     el = document.getElementById(this.init.arrOfCardsPlaces[j - 1][i - 1].cardId);
@@ -158,6 +221,10 @@
                             el.style.marginTop = 7 + "px";
                             margLeft += 20;
                             this.init.handOutPlace.appendChild(el);
+                            /*
+                                push.apply or push(...[])
+                                look less spaghetti
+                            */
                             this.init.arrhandOutCards = this.init.arrhandOutCards.concat(this.init.deck.splice(this.init.deck.length - 1, 1));
                             if (i == this.init.numhandOutCards) {
                                 el.draggable = true;
@@ -187,11 +254,41 @@
             }
         }
 
+        /*
+            Tsar method :)
+            A lot of nesting
+            Overcomplicated
+
+            same as method below
+
+            Surprisingly but the code below works :)
+
+            I don't wont to parse and comment further
+            because of bad readability and a lot of spaghetti
+            I will just summarize here
+
+            - Game logic is entangled with UI work.
+
+            - Too much nesting for
+                                if
+                                    if
+                                        for
+                                            if
+                                                etc...
+
+            - deep method/properties accessing obj.prop1.prop2.prop3 
+                getting worse when some prop is array. Don't be lazy and put them into variables with good names.
+                This approach works only while you are developing and keep these structures in mind
+
+            - I guess here is a lot of code that is repeatable and could be moved to a separate method(s)
+                All these loops looks like the same
+        */
         dropCards(event) {
             let el, data, lastEl, insertEl, lasttElementId, lasttElementColor, lasttElementrank, insertElColor,
                 insertElRank;
             data = event.dataTransfer.getData('text');
             insertEl = document.getElementById(data);
+
             if (this.init.parentElement.children.length > 0) {
                 lasttElementId = this.init.parentElement.lastElementChild.id;
                 lastEl = document.getElementById(lasttElementId);
@@ -226,7 +323,10 @@
                     draging.call(this);
                 }
             }
-
+            
+            /*
+                Possibly could be instance method
+            */
             function draging() {
 
                 // Проверяем откуда взяли карту.
@@ -276,7 +376,11 @@
                 }
             }
         }
-
+        
+        /*
+            I was wrong
+            this is Tsar method :))
+        */
         sendCardsHome(e) {
             let color, rank, i, j, u = 1, id, el, from, length, type;
             function searchСard(id) {
